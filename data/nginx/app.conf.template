@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name newsonar.spatz.wtf;
+    server_name {{ inventory_hostname }};
     location / {
         return 301 https://$host$request_uri;
     }    
@@ -10,15 +10,15 @@ server {
 }
 server {
     listen 443 ssl;
-    server_name newsonar.spatz.wtf;
+    server_name {{ inventory_hostname }};
 
     # this is the internal Docker DNS, cache only for 30s
     resolver 127.0.0.11 valid=30s;
 
     client_max_body_size 128M;
 
-    ssl_certificate /etc/letsencrypt/live/newsonar.spatz.wtf/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/newsonar.spatz.wtf/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/{{ inventory_hostname }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ inventory_hostname }}/privkey.pem;
 
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
@@ -34,6 +34,6 @@ server {
         proxy_pass          http://$upstream;
         proxy_read_timeout  90;
 
-        proxy_redirect      http://$upstream https://newsonar.spatz.wtf;
+        proxy_redirect      http://$upstream https://{{ inventory_hostname }};
     }
 }
