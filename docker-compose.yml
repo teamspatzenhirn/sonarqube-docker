@@ -2,11 +2,13 @@ version: "3"
 
 services:
   sonarqube:
-    image: sonarqube
+    image: sonarqube:lts
     networks:
       - frontend
       - backend
     environment:
+      - sonar.jdbc.username=sonar
+      - sonar.jdbc.password=sonar
       - sonar.jdbc.url=jdbc:postgresql://db:5432/sonar
     volumes:
       - sonarqube_conf:/opt/sonarqube/conf
